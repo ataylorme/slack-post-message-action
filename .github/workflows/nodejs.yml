@@ -49,3 +49,15 @@ jobs:
           path: eslint_report.json
       - name: Test That The Project Builds
         run: npm run build
+      - name: Post a message to Slack
+        uses: ataylorme/slack-post-message-action@master
+        with:
+          # (Required) A Slack API token
+          token: "${{ secrets.SLACK_TOKEN }}"
+          # (Required) The channel to post the message in
+          channel: "#github-action-test"
+          # (Required) A text string for the message body
+          message: "Hello from GitHub Actions"
+          # (Optional) A file containing a JSON-based
+          # array of structured Slack blocks
+          # block-json: "slack_block.json"
