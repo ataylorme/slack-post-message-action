@@ -6,10 +6,15 @@ A GitHub action that posts a message to Slack using [the Block format](https://a
 
 ## Arguments
 
+Note: if both `block-json` and `block-json-file` are set `block-json` will take priority.
+
 - `token`: (Required) A Slack API token
 - `channel`: (Required) The channel to post the message in
 - `message`: (Required) A text string for the message body
-- `block-json`: (Optional) A file containing a JSON-based array of structured Slack blocks
+- `block-json`: (Optional) A JSON string containing an array of structured Slack blocks
+  - If set, this will be passed as the `blocks` argument to [the Slack `chat.postMessage` API](https://api.slack.com/methods/chat.postMessage)
+  - See [the Slack block reference](https://api.slack.com/reference/block-kit/blocks) and [the Slack block builder](https://api.slack.com/tools/block-kit-builder)
+- `block-json-file`: (Optional) A file containing a JSON-based array of structured Slack blocks
   - If set, this will be passed as the `blocks` argument to [the Slack `chat.postMessage` API](https://api.slack.com/methods/chat.postMessage)
   - See [the Slack block reference](https://api.slack.com/reference/block-kit/blocks) and [the Slack block builder](https://api.slack.com/tools/block-kit-builder)
 
@@ -37,9 +42,11 @@ jobs:
           channel: "#my-channel"
           # (Required) A text string for the message body
           message: "Hello from the ${{ github.ref }} branch of ${{ github.repository }} GitHub Actions"
+          # (Optional) A JSON-based array of structured Slack blocks
+          block-json: "example_block.json"
           # (Optional) A file containing a JSON-based 
           # array of structured Slack blocks
-          block-json: "example_block.json"
+          block-json-file: "example_block.json"
 ```
 
 ## Example Block JSON

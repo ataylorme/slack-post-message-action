@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - "*"
+  release:
+    types: [published]
 
 jobs:
   node_test:
@@ -49,7 +51,8 @@ jobs:
           path: eslint_report.json
       - name: Test That The Project Builds
         run: npm run build
-      - name: Post a message to Slack
+      - name: Post a message to Slack on master or a PR
+        if: github.event_name != 'release'
         uses: ataylorme/slack-post-message-action@master
         with:
           # (Required) A Slack API token
@@ -57,7 +60,32 @@ jobs:
           # (Required) The channel to post the message in
           channel: "#github-action-test"
           # (Required) A text string for the message body
-          message: "Hello from the ${{ github.ref }} branch of ${{ github.repository }} GitHub Actions"
-          # (Optional) A file containing a JSON-based
-          # array of structured Slack blocks
-          # block-json: "slack_block.json"
+          message: "Hello from ${{ github.ref }} of ${{ github.repository }}"
+      - name: Post a message to Slack on release
+        if: github.event_name == 'release'
+        uses: ataylorme/slack-post-message-action@master
+        with:
+          # (Required) A Slack API token
+          token: "${{ secrets.SLACK_TOKEN }}"
+          # (Required) The channel to post the message in
+          channel: "#github-action-test"
+          # (Required) A text string for the message body
+          message: "Hello from ${{ github.ref }} of ${{ github.repository }}"
+          block-json: |
+            [
+              {
+                  "type": "section",
+                  "text": {
+                      "type": "mrkdwn",
+                      "text": "A new release `${{ github.ref }}` for `${{ github.repository }}` was published!"
+                  },
+                  "accessory": {
+                      "type": "button",
+                      "text": {
+                          "type": "plain_text",
+                          "text": "View on GitHub"
+                      },
+                      "url": "https://github.com/${{ github.repository }}/releases/tag/${{ github.ref }}"
+                  }
+              }
+            ]

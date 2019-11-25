@@ -3638,19 +3638,34 @@ function run() {
         const token = core.getInput('token', { required: true });
         const channelName = core.getInput('channel', { required: true });
         const messageText = core.getInput('message', { required: true });
-        const blockFile = core.getInput('block-json');
+        const blockJSON = core.getInput('block-json');
+        const blockFile = core.getInput('block-json-file');
         const postArgs = {
             channel: channelName,
             text: messageText,
         };
-        if (blockFile) {
+        if (blockJSON) {
+            try {
+                const blockObj = JSON.parse(blockJSON);
+                postArgs['blocks'] = blockObj;
+            }
+            catch (err) {
+                core.setFailed('Error parsing JSON from the block-json argument value.');
+            }
+        }
+        else if (blockFile) {
             const blockPath = path_1.default.resolve(blockFile);
             if (!fs_1.default.existsSync(blockPath)) {
-                core.setFailed('The slack-block-json file "${blockFile}" could not be resolved.');
+                core.setFailed('The file "${blockFile}" from the block-json-file argument could not be resolved.');
             }
-            const blockContents = fs_1.default.readFileSync(blockPath, 'utf-8');
-            const blockObj = JSON.parse(blockContents);
-            postArgs['blocks'] = blockObj;
+            try {
+                const blockContents = fs_1.default.readFileSync(blockPath, 'utf-8');
+                const blockObj = JSON.parse(blockContents);
+                postArgs['blocks'] = blockObj;
+            }
+            catch (err) {
+                core.setFailed('Error parsing JSON from the file name provided in the block-json-file argument.');
+            }
         }
         try {
             const slackClient = new web_api_1.WebClient(token);
