@@ -4,9 +4,17 @@
 
 A GitHub action that posts a message to Slack using [the Block format](https://api.slack.com/reference/block-kit/blocks).
 
+## Screenshot
+
+![Example screenshot](assets/images/github-release-slack-message-example.png)
+
 ## Arguments
 
-Note: if both `block-json` and `block-json-file` are set `block-json` will take priority.
+If both `block-json` and `block-json-file` are set `block-json` will take priority. 
+
+If `block-json-file` and/or `block-json` are set the contents of `message` will not be shown in Slack. However, it is still required as the Slack API errors without it.
+
+[GitHub Action Contexts](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts) can be used in `message` and `block-json`.
 
 - `token`: (Required) A Slack API token
 - `channel`: (Required) The channel to post the message in
@@ -33,20 +41,30 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - name: Post a message to Slack
-        uses: ataylorme/slack-block-message-action@1.0.0-beta1
+      - name: Post a message to Slack on release
+        uses: ataylorme/slack-post-message-action@master
         with:
-          # (Required) A Slack API token
           token: "${{ secrets.SLACK_TOKEN }}"
-          # (Required) The channel to post the message in
-          channel: "#my-channel"
-          # (Required) A text string for the message body
-          message: "Hello from the ${{ github.ref }} branch of ${{ github.repository }} GitHub Actions"
-          # (Optional) A JSON-based array of structured Slack blocks
-          block-json: "example_block.json"
-          # (Optional) A file containing a JSON-based 
-          # array of structured Slack blocks
-          block-json-file: "example_block.json"
+          channel: "#github-action-test"
+          message: "Hello from ${{ github.ref }} of ${{ github.repository }}"
+          block-json: |
+            [
+              {
+                  "type": "section",
+                  "text": {
+                      "type": "mrkdwn",
+                      "text": "A new release `${{ github.ref }}` for `${{ github.repository }}` was published by ${{ github.actor }}!"
+                  },
+                  "accessory": {
+                      "type": "button",
+                      "text": {
+                          "type": "plain_text",
+                          "text": "View on GitHub"
+                      },
+                      "url": "https://github.com/${{ github.repository }}/releases/tag/${{ github.ref }}"
+                  }
+              }
+            ]
 ```
 
 ## Example Block JSON
@@ -57,7 +75,7 @@ jobs:
         "type": "section",
         "text": {
             "type": "mrkdwn",
-            "text": "A new release `1.0.4` for `eslint-annotate-action` was published!"
+            "text": "A new release `1.0.0` for `ataylorme/slack-post-message-action` was published by `ataylorme`!"
         }
     },
     {
@@ -67,7 +85,7 @@ jobs:
         "type": "section",
         "text": {
             "type": "mrkdwn",
-            "text": "GitHub Tag: `1.0.4`"
+            "text": "GitHub Tag: `1.0.0`"
         },
         "accessory": {
             "type": "button",
@@ -75,7 +93,7 @@ jobs:
                 "type": "plain_text",
                 "text": "View on GitHub"
             },
-            "url": "https://github.com/ataylorme/eslint-annotate-action/releases/tag/1.0.4"
+            "url": "https://github.com/ataylorme/slack-post-message-action/releases/tag/1.0.0"
         }
     }
 ]
