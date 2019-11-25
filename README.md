@@ -10,9 +10,7 @@ A GitHub action that posts a message to Slack using [the Block format](https://a
 
 ## Arguments
 
-If both `block-json` and `block-json-file` are set `block-json` will take priority. 
-
-If `block-json-file` and/or `block-json` are set the contents of `message` will not be shown in Slack. However, it is still required as the Slack API errors without it.
+If both `block-json` and `block-json-file` are set `block-json` will take priority.
 
 [GitHub Action Contexts](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts) can be used in `message` and `block-json`.
 
