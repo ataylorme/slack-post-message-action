@@ -55,21 +55,15 @@ jobs:
         if: github.event_name != 'release'
         uses: ataylorme/slack-post-message-action@master
         with:
-          # (Required) A Slack API token
           token: "${{ secrets.SLACK_TOKEN }}"
-          # (Required) The channel to post the message in
           channel: "#github-action-test"
-          # (Required) A text string for the message body
           message: "Hello from ${{ github.ref }} of ${{ github.repository }}"
       - name: Post a message to Slack on release
         if: github.event_name == 'release'
         uses: ataylorme/slack-post-message-action@master
         with:
-          # (Required) A Slack API token
           token: "${{ secrets.SLACK_TOKEN }}"
-          # (Required) The channel to post the message in
           channel: "#github-action-test"
-          # (Required) A text string for the message body
           message: "Hello from ${{ github.ref }} of ${{ github.repository }}"
           block-json: |
             [
@@ -77,7 +71,7 @@ jobs:
                   "type": "section",
                   "text": {
                       "type": "mrkdwn",
-                      "text": "A new release `${{ github.ref }}` for `${{ github.repository }}` was published!"
+                      "text": "A new release `${{ github.ref }}` for `${{ github.repository }}` was published by ${{ github.actor }}!"
                   },
                   "accessory": {
                       "type": "button",
