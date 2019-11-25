@@ -9,7 +9,7 @@ A GitHub action that posts a message to Slack using [the Block format](https://a
 - `token`: (Required) A Slack API token
 - `channel`: (Required) The channel to post the message in
 - `message`: (Required) A text string for the message body
-- `block-json`: (Optional) A JSON-based array of structured Slack blocks
+- `block-json`: (Optional) A file containing a JSON-based array of structured Slack blocks
   - If set, this will be passed as the `blocks` argument to [the Slack `chat.postMessage` API](https://api.slack.com/methods/chat.postMessage)
   - See [the Slack block reference](https://api.slack.com/reference/block-kit/blocks) and [the Slack block builder](https://api.slack.com/tools/block-kit-builder)
 
@@ -37,9 +37,8 @@ jobs:
           channel: "#my-channel"
           # (Required) A text string for the message body
           message: "Hello World"
-          # (Optional) A JSON-based array of structured Slack blocks
-          # See https://api.slack.com/reference/block-kit/blocks
-          # and https://api.slack.com/methods/chat.postMessage
+          # (Optional) A file containing a JSON-based 
+          # array of structured Slack blocks
           block-json: "example_block.json"
 ```
 
