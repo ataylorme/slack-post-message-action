@@ -36,7 +36,7 @@ jobs:
           # (Required) The channel to post the message in
           channel: "#my-channel"
           # (Required) A text string for the message body
-          message: "Hello World"
+          message: "Hello from the ${{ github.ref }} branch of ${{ github.repository }} GitHub Actions"
           # (Optional) A file containing a JSON-based 
           # array of structured Slack blocks
           block-json: "example_block.json"

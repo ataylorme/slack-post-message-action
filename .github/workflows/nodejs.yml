@@ -57,7 +57,7 @@ jobs:
           # (Required) The channel to post the message in
           channel: "#github-action-test"
           # (Required) A text string for the message body
-          message: "Hello from GitHub Actions"
+          message: "Hello from the ${{ github.ref }} branch of ${{ github.repository }} GitHub Actions"
           # (Optional) A file containing a JSON-based
           # array of structured Slack blocks
           # block-json: "slack_block.json"
