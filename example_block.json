@@ -4,16 +4,6 @@
         "text": {
             "type": "mrkdwn",
             "text": "A new release `1.0.4` for `eslint-annotate-action` was published!"
-        }
-    },
-    {
-        "type": "divider"
-    },
-    {
-        "type": "section",
-        "text": {
-            "type": "mrkdwn",
-            "text": "GitHub Tag: `1.0.4`"
         },
         "accessory": {
             "type": "button",
